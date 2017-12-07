@@ -63,10 +63,6 @@ filter: "vendor=mycompany,app!=mmp-database"
 log:
   output: "stdout"
   level: "debug"
-
-datadog:
-  api-key: xxx
-  app-key: xxx
 ```
 
 The environment variable consumed by kube-deployments-notifier are option names prefixed
