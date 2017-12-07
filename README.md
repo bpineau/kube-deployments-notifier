@@ -16,15 +16,13 @@ make build
 
 The daemon may run either as a pod, or outside of the Kubernetes cluster.
 He should find the Kubernetes api-server automatically (or you can use the
-"-s" or "-k" flags).
+"-s" or "-k" flags). You can pass parameters from cli args, env, config
+files, or both.
 
-You can pass configuration values either by command line arguments, or
-environment variables, a yaml configuration file, or a combination or those.
-
-Example
+Example:
 ```
 kube-deployments-notifier \
-  -l 'vendor=mirakl,app!=mmp-database' \
+  -l 'vendor=mycompany,app!=mmp-database' \
   -t Authorization -a "Bearer vbnf3hjklp5iuytre" \
   -e http://myapiserver:8042 
 ```
