@@ -2,6 +2,7 @@ package deployment
 
 import (
 	"github.com/bpineau/kube-deployments-notifier/config"
+	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -18,10 +19,11 @@ type Controller struct {
 }
 
 // Init initialize deployment controller
-func (c *Controller) Init(conf *config.KdnConfig) controllers.Controller {
+func (c *Controller) Init(conf *config.KdnConfig, n notifiers.Notifier) controllers.Controller {
 	c.CommonController = controllers.CommonController{
 		Conf: conf,
 		Name: "deployment",
+		Notifiers: n,
 	}
 
 	client := c.Conf.ClientSet

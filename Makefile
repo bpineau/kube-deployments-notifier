@@ -34,7 +34,7 @@ deps:
 	glide install
 
 build:
-	env CGO_ENABLED=0 go build
+	env CGO_ENABLED=0 go build -i
 
 install:
 	env CGO_ENABLED=0 go install
@@ -43,6 +43,6 @@ clean:
 	go clean -i
 
 test:
-	go test -v ./...
+	go test -race -cover -v github.com/bpineau/kube-deployments-notifier/pkg/...
 
 .PHONY: tools lint fmt install clean test all

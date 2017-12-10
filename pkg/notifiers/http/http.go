@@ -1,7 +1,9 @@
 package http
 
 import (
+	"fmt"
 	"bytes"
+	"errors"
 	"time"
 	api "net/http"
 
@@ -36,8 +38,14 @@ func (l *Notifier) push(c *config.KdnConfig, method string, msg string) error {
 	timeout := time.Duration(10 * time.Second)
 	client := &api.Client{Timeout: timeout}
 	resp, err := client.Do(req)
+
 	if err != nil {
 		return err
 	}
+
+	if resp.StatusCode >= 400 {
+		return errors.New(fmt.Sprintf("HTTP request failed (code=%d)", resp.StatusCode))
+	}
+
 	return resp.Body.Close()
 }

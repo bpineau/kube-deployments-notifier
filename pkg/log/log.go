@@ -2,11 +2,13 @@ package log
 
 import (
 	"io"
+	"io/ioutil"
 	"os"
 
 	"log/syslog"
 
 	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	ls "github.com/sirupsen/logrus/hooks/syslog"
 )
 
@@ -21,6 +23,9 @@ func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 		output = os.Stdout
 	case "stderr":
 		output = os.Stderr
+	case "test":
+		output = ioutil.Discard
+		_, hook = test.NewNullLogger()
 	case "syslog":
 		output = os.Stderr // does not matter ?
 		if logServer == "" {
@@ -60,7 +65,7 @@ func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 		Level:     level,
 	}
 
-	if logOutput == "syslog" {
+	if logOutput == "syslog" || logOutput == "test" {
 		log.Hooks.Add(hook)
 	}
 

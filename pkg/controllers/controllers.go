@@ -21,24 +21,16 @@ var (
 	maxProcessRetry = 6
 )
 
-// Controller are started in a persistent goroutine a program launch,
+// Controller are started in a persistent goroutine at program launch,
 // and are responsible for watching resources and calling notifiers.
 type Controller interface {
 	Start(wg *sync.WaitGroup)
 	Stop()
-	Init(c *config.KdnConfig) Controller
+	Init(c *config.KdnConfig, n notifiers.Notifier) Controller
 }
 
-// CommonController groups fields and funcs that most controllers would like
-// to implement (at least, controllers in the Kubernetes' client-go sense),
-// maybe by embedding (https://golang.org/doc/effective_go.html#embedding).
-// For example with:
-//  import "github.com/bpineau/kube-deployments-notifier/pkg/controllers"
-//  type MyThing struct {
-//      controllers.CommonController
-//  }
-// You would benefit for the common "Controller" interface implementation,
-// except for Init() that you need to implement.
+// CommonController groups fields and funcs that most controllers would
+// like to implement (controllers in the Kubernetes' client-go sense).
 type CommonController struct {
 	Conf      *config.KdnConfig
 	Queue     workqueue.RateLimitingInterface
@@ -47,6 +39,7 @@ type CommonController struct {
 	ListWatch cache.ListerWatcher
 	ObjType   runtime.Object
 	StopCh    chan struct{}
+	Notifiers notifiers.Notifier
 	wg        *sync.WaitGroup
 }
 
@@ -164,11 +157,8 @@ func (c *CommonController) processItem(key string) error {
 	jobj := fmt.Sprintf("%s", res)
 
 	if !exists {
-		notifiers.Deleted(c.Conf, jobj)
-		return nil
+		return c.Notifiers.Deleted(c.Conf, fmt.Sprintf(`{"name":"%s"}`, key))
 	}
 
-	notifiers.Changed(c.Conf, jobj)
-
-	return nil
+	return c.Notifiers.Changed(c.Conf, jobj)
 }

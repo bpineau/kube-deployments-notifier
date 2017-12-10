@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
+	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers/deployment"
 	"github.com/bpineau/kube-deployments-notifier/pkg/health"
@@ -22,8 +23,10 @@ func Run(config *config.KdnConfig) {
 	wg.Add(len(conts))
 	defer wg.Wait()
 
+	notifiers := notifiers.Init(notifiers.Backends)
+
 	for _, c := range conts {
-		go c.Init(config).Start(&wg)
+		go c.Init(config, notifiers).Start(&wg)
 		defer func(c controllers.Controller) {
 			go c.Stop()
 		}(c)
