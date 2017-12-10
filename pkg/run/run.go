@@ -10,6 +10,7 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers/deployment"
 	"github.com/bpineau/kube-deployments-notifier/pkg/health"
+	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 )
 
 var conts = []controllers.Controller{
@@ -22,8 +23,10 @@ func Run(config *config.KdnConfig) {
 	wg.Add(len(conts))
 	defer wg.Wait()
 
+	notifiers := notifiers.Init(notifiers.Backends)
+
 	for _, c := range conts {
-		go c.Init(config).Start(&wg)
+		go c.Init(config, notifiers).Start(&wg)
 		defer func(c controllers.Controller) {
 			go c.Stop()
 		}(c)
