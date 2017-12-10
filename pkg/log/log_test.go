@@ -22,11 +22,11 @@ func TestLog(t *testing.T) {
 
 	logger.Warn("Changed: baz")
 	if hook.LastEntry().Message != "Changed: baz" {
-		t.Errorf("Unexpected log entry: %s", hook.LastEntry())
+		t.Errorf("Unexpected log entry: %s", hook.LastEntry().Message)
 	}
 
 	logger = New("info", "192.0.2.0:514", "syslog")
 	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
-		t.Error("Failed to instanciate a syslog logger")
+		t.Error("Failed to instantiate a syslog logger")
 	}
 }

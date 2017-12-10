@@ -54,9 +54,9 @@ func (n *Composite) invoke(method string, c *config.KdnConfig, msg string) error
 		return nil
 	}
 
-	var res error = nil
+	var res error
 	for _, notifier := range n.Notifiers {
-		var err error = nil
+		var err error
 		if method == "Changed" {
 			err = notifier.Changed(c, msg)
 		} else {

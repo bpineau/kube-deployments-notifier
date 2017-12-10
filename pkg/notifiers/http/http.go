@@ -1,11 +1,10 @@
 package http
 
 import (
-	"fmt"
 	"bytes"
-	"errors"
-	"time"
+	"fmt"
 	api "net/http"
+	"time"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
 )
@@ -29,7 +28,7 @@ func (l *Notifier) push(c *config.KdnConfig, method string, msg string) error {
 		return nil
 	}
 
-	req, err := api.NewRequest(method, c.Endpoint, bytes.NewBuffer([]byte(msg)))
+	req, _ := api.NewRequest(method, c.Endpoint, bytes.NewBuffer([]byte(msg)))
 	req.Header.Set("Content-Type", "application/json")
 	if c.TokenHdr != "" && c.TokenVal != "" {
 		req.Header.Set(c.TokenHdr, c.TokenVal)
@@ -44,7 +43,7 @@ func (l *Notifier) push(c *config.KdnConfig, method string, msg string) error {
 	}
 
 	if resp.StatusCode >= 400 {
-		return errors.New(fmt.Sprintf("HTTP request failed (code=%d)", resp.StatusCode))
+		return fmt.Errorf("HTTP request failed (code=%d)", resp.StatusCode)
 	}
 
 	return resp.Body.Close()

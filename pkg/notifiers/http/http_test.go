@@ -12,10 +12,8 @@ func TestHttpNotifier(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("X-Foo") != "Bar" {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("500 - Server Failure"))
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
 	}))
 	defer ts.Close()
 
@@ -50,7 +48,6 @@ func TestHttpNotifierNoEndpoint(t *testing.T) {
 func TestHttpNotifierFailures(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("500 - Server Failure"))
 	}))
 	defer ts.Close()
 

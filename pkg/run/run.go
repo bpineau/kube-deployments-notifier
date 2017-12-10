@@ -7,10 +7,10 @@ import (
 	"syscall"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
-	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers/deployment"
 	"github.com/bpineau/kube-deployments-notifier/pkg/health"
+	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 )
 
 var conts = []controllers.Controller{

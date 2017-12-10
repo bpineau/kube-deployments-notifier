@@ -37,12 +37,12 @@ func TestNotifyCounted(t *testing.T) {
 
 	err := backends.Changed(conf, "foo")
 	if err != nil || countNotifier.Count() != 1 {
-		t.Errorf("Wrong number of notification recieved after a change")
+		t.Errorf("Wrong number of notification received after a change")
 	}
 
 	err = backends.Deleted(conf, "foo")
 	if err != nil || countNotifier.Count() != 2 {
-		t.Errorf("Wrong number of notification recieved after a deletion")
+		t.Errorf("Wrong number of notification received after a deletion")
 	}
 
 	conf.DryRun = true

@@ -8,8 +8,8 @@ import (
 	"log/syslog"
 
 	"github.com/sirupsen/logrus"
-	"github.com/sirupsen/logrus/hooks/test"
 	ls "github.com/sirupsen/logrus/hooks/syslog"
+	"github.com/sirupsen/logrus/hooks/test"
 )
 
 // New initialize logrus and return a new logger
