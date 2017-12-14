@@ -153,7 +153,10 @@ func (c *CommonController) processItem(key string) error {
 		return fmt.Errorf("Error fetching object with key %s from store: %v", key, err)
 	}
 
-	res, _ := json.Marshal(obj)
+	res, err := json.Marshal(obj)
+	if err != nil {
+		return fmt.Errorf("Error marshalling %s object to json: %v", key, err)
+	}
 	jobj := fmt.Sprintf("%s", res)
 
 	if !exists {

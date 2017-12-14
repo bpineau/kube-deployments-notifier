@@ -17,6 +17,7 @@ func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 	var level logrus.Level
 	var output io.Writer
 	var hook logrus.Hook
+	var err error
 
 	switch logOutput {
 	case "stdout":
@@ -31,7 +32,10 @@ func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 		if logServer == "" {
 			panic("syslog output needs a log server (ie. 127.0.0.1:514)")
 		}
-		hook, _ = ls.NewSyslogHook("udp", logServer, syslog.LOG_INFO, "kube-deployments-notifier")
+		hook, err = ls.NewSyslogHook("udp", logServer, syslog.LOG_INFO, "kube-deployments-notifier")
+		if err != nil {
+			panic(err)
+		}
 	default:
 		output = os.Stderr
 	}

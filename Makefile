@@ -12,7 +12,6 @@ lint:
 		--enable=vetshadow \
 		--enable=errcheck \
 		--enable=structcheck \
-		--enable=aligncheck \
 		--enable=deadcode \
 		--enable=ineffassign \
 		--enable=dupl \

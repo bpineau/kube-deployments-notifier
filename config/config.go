@@ -13,7 +13,7 @@ import (
 type KdnConfig struct {
 	DryRun     bool
 	Logger     *logrus.Logger
-	ClientSet  *kubernetes.Clientset
+	ClientSet  kubernetes.Interface
 	Endpoint   string
 	TokenHdr   string
 	TokenVal   string
@@ -30,7 +30,7 @@ func (c *KdnConfig) Init(apiserver string, kubeconfig string) {
 		panic(fmt.Errorf("Failed init Kubernetes clientset: %+v", err))
 	}
 
-	_, err = c.ClientSet.Namespaces().List(metav1.ListOptions{})
+	_, err = c.ClientSet.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
 		panic(fmt.Errorf("Failed to query Kubernetes api-server: %+v", err))
 	}
