@@ -9,6 +9,7 @@ import (
 const nonExistentPath = "\\/hopefully/non/existent/path"
 
 func TestClientSet(t *testing.T) {
+	t.Skip("Skipping TestClientSet for now: depends on configured ~/.kube or running in cluster")
 	cs, err := NewClientSet("", "")
 	if err != nil {
 		t.Fatal(err)

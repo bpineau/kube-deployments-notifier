@@ -28,7 +28,11 @@ func (l *Notifier) push(c *config.KdnConfig, method string, msg string) error {
 		return nil
 	}
 
-	req, _ := api.NewRequest(method, c.Endpoint, bytes.NewBuffer([]byte(msg)))
+	req, err := api.NewRequest(method, c.Endpoint, bytes.NewBuffer([]byte(msg)))
+	if err != nil {
+		return err
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 	if c.TokenHdr != "" && c.TokenVal != "" {
 		req.Header.Set(c.TokenHdr, c.TokenVal)

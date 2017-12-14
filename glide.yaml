@@ -22,6 +22,6 @@ import:
   version: ~1.0.3
 # See https://github.com/sirupsen/logrus/issues/553
 - package: github.com/Sirupsen/logrus
-  repo: git@github.com:/sirupsen/logrus
+  repo: https://github.com:/sirupsen/logrus
   vcs: git
   version: ~1.0.3

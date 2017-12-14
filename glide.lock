@@ -1,5 +1,5 @@
-hash: 256d55cacd4eb0a447c56df5816bf1226d7edfb38e5e47978c864954359ace1d
-updated: 2017-12-06T23:13:23.391974482+01:00
+hash: b1cbc2c372dbc284ce7340831f6120f004a69fde5aebf79136892773bd6ff8fd
+updated: 2017-12-14T08:01:21.100951468+01:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -95,9 +95,10 @@ imports:
   version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
   subpackages:
   - hooks/syslog
+  - hooks/test
 - name: github.com/Sirupsen/logrus
   version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
-  repo: git@github.com:/sirupsen/logrus
+  repo: https://github.com:/sirupsen/logrus
   vcs: git
 - name: github.com/spf13/afero
   version: ee1bd8ee15a1306d1f9201acc41ef39cd9f99a1b
