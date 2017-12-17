@@ -97,7 +97,7 @@ spec:
     spec:
       containers:
         - name: kube-deployments-notifier
-          image: bpineau/kube-deployments-notifier:v0.2.0
+          image: bpineau/kube-deployments-notifier:0.2.0
           args:
             - --filter 'vendor=mycompany,app!=mmp-database'
             - --endpoint https://myapiserver
