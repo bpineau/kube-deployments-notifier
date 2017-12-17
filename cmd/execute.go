@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -19,6 +20,8 @@ import (
 const appName = "kube-deployments-notifier"
 
 var (
+	version = "0.2.0 (HEAD)"
+
 	cfgFile   string
 	apiServer string
 	kubeConf  string
@@ -32,6 +35,14 @@ var (
 	filter    string
 	healthP   int
 	resync    int
+
+	versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Print the version number",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("%s version %s\n", appName, version)
+		},
+	}
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
@@ -71,6 +82,7 @@ func bindPFlag(key string, cmd string) {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	rootCmd.AddCommand(versionCmd)
 
 	defaultCfg := "/etc/kdn/" + appName + ".yaml"
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", defaultCfg, "configuration file")
