@@ -2,10 +2,22 @@ package log
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
+)
+
+var (
+	levels = [...]string{
+		"debug",
+		"info",
+		"warning",
+		"error",
+		"fatal",
+		"panic",
+	}
 )
 
 func TestLog(t *testing.T) {
@@ -25,8 +37,55 @@ func TestLog(t *testing.T) {
 		t.Errorf("Unexpected log entry: %s", hook.LastEntry().Message)
 	}
 
+	logger = New("", "", "test")
+	if logger.Level != logrus.InfoLevel {
+		t.Error("The default loglevel should be info")
+	}
+
+	logger = New("", "", "")
+	if logger.Out != os.Stderr {
+		t.Error("The default output should be stderr")
+	}
+
 	logger = New("info", "192.0.2.0:514", "syslog")
 	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
 		t.Error("Failed to instantiate a syslog logger")
 	}
+
+	logger = New("info", "", "stdout")
+	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
+		t.Error("Failed to instantiate a stdout logger")
+	}
+
+	logger = New("info", "", "stderr")
+	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
+		t.Error("Failed to instantiate a stderr logger")
+	}
+
+	for _, level := range levels {
+		lg := New(level, "", "test")
+		if fmt.Sprintf("%T", lg) != "*logrus.Logger" {
+			t.Errorf("Failed to instantiate at %s level", level)
+		}
+	}
+}
+
+func TestSyslogMissingArg(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("syslog logger should panic without a server")
+		}
+	}()
+
+	_ = New("info", "", "syslog")
+}
+
+func TestSyslogWrongArg(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("syslog logger should panic on wrong server address")
+		}
+	}()
+
+	_ = New("info", "wrong server", "syslog")
 }
