@@ -33,7 +33,7 @@ func Run(config *config.KdnConfig) {
 		}(c)
 	}
 
-	go log.Fatal(health.HeartBeatService(config))
+	go log.Println(health.HeartBeatService(config))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGTERM)
