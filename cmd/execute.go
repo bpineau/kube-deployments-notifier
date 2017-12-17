@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
@@ -30,6 +31,7 @@ var (
 	tokenVal  string
 	filter    string
 	healthP   int
+	resync    int
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
@@ -46,6 +48,7 @@ var (
 				TokenVal:   viper.GetString("token-value"),
 				Filter:     viper.GetString("filter"),
 				HealthPort: viper.GetInt("healthcheck-port"),
+				ResyncIntv: time.Duration(viper.GetInt("resync-interval")) * time.Second,
 			}
 			config.Init(viper.GetString("api-server"), viper.GetString("kube-config"))
 			run.Run(config)
@@ -107,6 +110,9 @@ func init() {
 
 	rootCmd.PersistentFlags().IntVarP(&healthP, "healthcheck-port", "p", 0, "port for answering healthchecks")
 	bindPFlag("healthcheck-port", "healthcheck-port")
+
+	rootCmd.PersistentFlags().IntVarP(&resync, "resync-interval", "i", 900, "resync interval in seconds (0 to disable)")
+	bindPFlag("resync-interval", "resync-interval")
 }
 
 func initConfig() {

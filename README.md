@@ -47,6 +47,7 @@ Flags:
   -v, --log-level string       log level (default "debug")
   -o, --log-output string      log output (default "stderr")
   -r, --log-server string      log server (if using syslog)
+  -i, --resync-interval int    resync interval in seconds (0 to disable) (default 900)
   -t, --token-header string    token header name
   -a, --token-value string     token header value
 ```
@@ -60,6 +61,7 @@ endpoint: https://my-api-endpoint/foo/bar
 token-header: Authorization
 token-value: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 filter: "vendor=mycompany,app!=mmp-database"
+resync-interval: 900
 
 log:
   output: "stdout"

@@ -17,7 +17,6 @@ import (
 )
 
 var (
-	resyncInterval  = 300 * time.Second
 	maxProcessRetry = 6
 )
 
@@ -73,7 +72,7 @@ func (c *CommonController) startInformer() {
 	c.Informer = cache.NewSharedIndexInformer(
 		c.ListWatch,
 		c.ObjType,
-		resyncInterval,
+		c.Conf.ResyncIntv,
 		cache.Indexers{},
 	)
 
