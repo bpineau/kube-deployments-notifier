@@ -14,7 +14,33 @@ import (
 
 // New initialize logrus and return a new logger
 func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
-	var level logrus.Level
+	level, err := logrus.ParseLevel(logLevel)
+	if err != nil {
+		level = logrus.InfoLevel
+	}
+
+	output, hook := getOutput(logServer, logOutput)
+
+	formatter := &logrus.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	}
+
+	log := &logrus.Logger{
+		Out:       output,
+		Formatter: formatter,
+		Hooks:     make(logrus.LevelHooks),
+		Level:     level,
+	}
+
+	if logOutput == "syslog" || logOutput == "test" {
+		log.Hooks.Add(hook)
+	}
+
+	return log
+}
+
+func getOutput(logServer string, logOutput string) (io.Writer, logrus.Hook) {
 	var output io.Writer
 	var hook logrus.Hook
 	var err error
@@ -40,38 +66,5 @@ func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 		output = os.Stderr
 	}
 
-	switch logLevel {
-	case "debug":
-		level = logrus.DebugLevel
-	case "info":
-		level = logrus.InfoLevel
-	case "warning":
-		level = logrus.WarnLevel
-	case "error":
-		level = logrus.ErrorLevel
-	case "fatal":
-		level = logrus.FatalLevel
-	case "panic":
-		level = logrus.PanicLevel
-	default:
-		level = logrus.InfoLevel
-	}
-
-	formatter := &logrus.TextFormatter{
-		FullTimestamp:   true,
-		TimestampFormat: "2006-01-02 15:04:05",
-	}
-
-	log := &logrus.Logger{
-		Out:       output,
-		Formatter: formatter,
-		Hooks:     make(logrus.LevelHooks),
-		Level:     level,
-	}
-
-	if logOutput == "syslog" || logOutput == "test" {
-		log.Hooks.Add(hook)
-	}
-
-	return log
+	return output, hook
 }

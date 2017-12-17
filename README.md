@@ -1,6 +1,7 @@
 # kube-deployments-notifier
 
 [![Build Status](https://travis-ci.org/bpineau/kube-deployments-notifier.svg?branch=master)](https://travis-ci.org/bpineau/kube-deployments-notifier)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bpineau/kube-deployments-notifier)](https://goreportcard.com/report/github.com/bpineau/kube-deployments-notifier)
 
 An example Kubernetes controller that list and watch deployments, and send
 them as json payload to a remote API endpoint.

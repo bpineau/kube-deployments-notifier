@@ -4,3 +4,5 @@
 *.swp
 *.swo
 /vendor/
+dist/*
+kube-deployments-notifier
