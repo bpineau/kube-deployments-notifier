@@ -12,3 +12,9 @@ release:
   # don't autopublish
   draft: true
 
+dockers:
+  -
+    image: bpineau/kube-deployments-notifier
+    goos: linux
+    goarch: amd64
+    latest: true
