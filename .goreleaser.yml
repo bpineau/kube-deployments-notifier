@@ -1,5 +1,6 @@
 builds:
   -
+    ldflags: -s -w -X github.com/bpineau/kube-deployments-notifier/cmd.version={{.Version}}
     env:
       - CGO_ENABLED=0
     goos:
@@ -18,3 +19,4 @@ dockers:
     goos: linux
     goarch: amd64
     latest: true
+    dockerfile: Dockerfile.goreleaser

@@ -1,0 +1,4 @@
+FROM alpine:3.7
+RUN apk --no-cache add ca-certificates
+COPY kube-deployments-notifier /usr/bin/
+ENTRYPOINT ["/usr/bin/kube-deployments-notifier"]
