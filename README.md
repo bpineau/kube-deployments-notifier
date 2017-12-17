@@ -6,6 +6,18 @@
 An example Kubernetes controller that list and watch deployments, and send
 them as json payload to a remote API endpoint.
 
+## Docker image
+
+A ready to use, public docker image is available at [Docker Hub](https://hub.docker.com/r/bpineau/kube-deployments-notifier/), published at each release.
+You can use it directly from your Kubernetes deployments, ie.
+
+```yaml
+image: bpineau/kube-deployments-notifier:v0.2.0
+args:
+  - -l 'vendor=mycompany,app!=mmp-database'
+  - -e http://myapiserver:804
+```
+
 ## Build
 
 Assuming you have go 1.9 and glide in the path, and GOPATH configured:
