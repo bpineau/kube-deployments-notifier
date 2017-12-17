@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/bpineau/kube-deployments-notifier/pkg/clientset"
 	"github.com/sirupsen/logrus"
@@ -19,6 +20,7 @@ type KdnConfig struct {
 	TokenVal   string
 	Filter     string
 	HealthPort int
+	ResyncIntv time.Duration
 }
 
 // Init initialize the configuration (creating the ClientSet for the cluster)
