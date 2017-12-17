@@ -60,6 +60,12 @@ func Execute() {
 	}
 }
 
+func bindPFlag(key string, cmd string) {
+	if err := viper.BindPFlag(key, rootCmd.PersistentFlags().Lookup(cmd)); err != nil {
+		log.Fatal("Failed to bind cli argument:", err)
+	}
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -67,63 +73,40 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", defaultCfg, "configuration file")
 
 	rootCmd.PersistentFlags().StringVarP(&apiServer, "api-server", "s", "", "kube api server url")
-	if err := viper.BindPFlag("api-server", rootCmd.PersistentFlags().Lookup("api-server")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("api-server", "api-server")
 
 	rootCmd.PersistentFlags().StringVarP(&kubeConf, "kube-config", "k", "", "kube config path")
-	if err := viper.BindPFlag("kube-config", rootCmd.PersistentFlags().Lookup("kube-config")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("kube-config", "kube-config")
 	if err := viper.BindEnv("kube-config", "KUBECONFIG"); err != nil {
 		log.Fatal("Failed to bind cli argument:", err)
 	}
 
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "dry-run mode")
-	if err := viper.BindPFlag("dry-run", rootCmd.PersistentFlags().Lookup("dry-run")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("dry-run", "dry-run")
 
 	rootCmd.PersistentFlags().StringVarP(&logLevel, "log-level", "v", "debug", "log level")
-	if err := viper.BindPFlag("log.level", rootCmd.PersistentFlags().Lookup("log-level")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("log.level", "log-level")
 
 	rootCmd.PersistentFlags().StringVarP(&logOutput, "log-output", "o", "stderr", "log output")
-	if err := viper.BindPFlag("log.output", rootCmd.PersistentFlags().Lookup("log-output")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("log.output", "log-output")
 
 	rootCmd.PersistentFlags().StringVarP(&logServer, "log-server", "r", "", "log server (if using syslog)")
-	if err := viper.BindPFlag("log.server", rootCmd.PersistentFlags().Lookup("log-server")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("log.server", "log-server")
 
 	rootCmd.PersistentFlags().StringVarP(&endpoint, "endpoint", "e", "", "API endpoint")
-	if err := viper.BindPFlag("endpoint", rootCmd.PersistentFlags().Lookup("endpoint")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("endpoint", "endpoint")
 
 	rootCmd.PersistentFlags().StringVarP(&tokenHdr, "token-header", "t", "", "token header name")
-	if err := viper.BindPFlag("token-header", rootCmd.PersistentFlags().Lookup("token-header")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("token-header", "token-header")
 
 	rootCmd.PersistentFlags().StringVarP(&tokenVal, "token-value", "a", "", "token header value")
-	if err := viper.BindPFlag("token-value", rootCmd.PersistentFlags().Lookup("token-value")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("token-value", "token-value")
 
 	rootCmd.PersistentFlags().StringVarP(&filter, "filter", "l", "", "Label filter")
-	if err := viper.BindPFlag("filter", rootCmd.PersistentFlags().Lookup("filter")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
+	bindPFlag("filter", "filter")
 
 	rootCmd.PersistentFlags().IntVarP(&healthP, "healthcheck-port", "p", 0, "port for answering healthchecks")
-	if err := viper.BindPFlag("healthcheck-port", rootCmd.PersistentFlags().Lookup("healthcheck-port")); err != nil {
-		log.Fatal("Failed to bind cli argument:", err)
-	}
-
+	bindPFlag("healthcheck-port", "healthcheck-port")
 }
 
 func initConfig() {

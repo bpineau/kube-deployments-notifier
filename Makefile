@@ -10,6 +10,7 @@ lint:
 		--enable=golint \
 		--enable=vet \
 		--enable=vetshadow \
+		--enable=varcheck \
 		--enable=errcheck \
 		--enable=structcheck \
 		--enable=deadcode \
@@ -24,6 +25,7 @@ lint:
 		--enable=misspell \
 		--enable=gas \
 		--enable=goimports \
+		--enable=gocyclo \
 		./...
 
 fmt:
@@ -39,6 +41,7 @@ install:
 	env CGO_ENABLED=0 go install
 
 clean:
+	rm -rf dist/
 	go clean -i
 
 test:
