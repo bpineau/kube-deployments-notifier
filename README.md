@@ -6,18 +6,6 @@
 An example Kubernetes controller that list and watch deployments, and send
 them as json payload to a remote API endpoint.
 
-## Docker image
-
-A ready to use, public docker image is available at [Docker Hub](https://hub.docker.com/r/bpineau/kube-deployments-notifier/), published at each release.
-You can use it directly from your Kubernetes deployments, ie.
-
-```yaml
-image: bpineau/kube-deployments-notifier:v0.2.0
-args:
-  - -l 'vendor=mycompany,app!=mmp-database'
-  - -e http://myapiserver:804
-```
-
 ## Build
 
 Assuming you have go 1.9 and glide in the path, and GOPATH configured:
@@ -83,3 +71,48 @@ log:
 The environment variable consumed by kube-deployments-notifier are option names prefixed
 by ```KDN_``` and using underscore instead of dash. Except KUBECONFIG,
 used without a prefix (to match kubernetes conventions).
+
+## Docker image
+
+A ready to use, public docker image is available at [Docker Hub](https://hub.docker.com/r/bpineau/kube-deployments-notifier/), published at each release.
+You can use it directly from your Kubernetes deployments, ie.
+
+```yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: kube-deployments-notifier
+  namespace: kube-system
+  labels:
+    k8s-app: kube-deployments-notifier
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kube-deployments-notifier
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-deployments-notifier
+    spec:
+      containers:
+        - name: kube-deployments-notifier
+          image: bpineau/kube-deployments-notifier:v0.2.0
+          args:
+            - --filter 'vendor=mycompany,app!=mmp-database'
+            - --endpoint https://myapiserver
+            - --healthcheck-port 8080
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 50Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            timeoutSeconds: 5
+            initialDelaySeconds: 10
+```
