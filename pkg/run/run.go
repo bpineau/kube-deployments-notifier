@@ -1,6 +1,7 @@
 package run
 
 import (
+	"log"
 	"os"
 	"os/signal"
 	"sync"
@@ -32,7 +33,7 @@ func Run(config *config.KdnConfig) {
 		}(c)
 	}
 
-	go health.HeartBeatService(config)
+	go log.Fatal(health.HeartBeatService(config))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGTERM)

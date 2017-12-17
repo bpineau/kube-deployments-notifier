@@ -33,6 +33,12 @@ func TestHttpNotifier(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to notify a deletion")
 	}
+
+	conf.Endpoint = ""
+	err = notifier.Changed(conf, "foo")
+	if err != nil {
+		t.Errorf("HTTP notifier should ignore null endpoints")
+	}
 }
 
 func TestHttpNotifierNoEndpoint(t *testing.T) {
@@ -67,4 +73,12 @@ func TestHttpNotifierFailures(t *testing.T) {
 	if err == nil {
 		t.Errorf("Failed to notice request failure")
 	}
+
+	conf.Endpoint = ":"
+
+	err = notifier.Changed(conf, "baz")
+	if err == nil {
+		t.Errorf("Failed to notice a unparsable url")
+	}
+
 }

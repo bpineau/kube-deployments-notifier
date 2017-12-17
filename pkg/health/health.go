@@ -15,12 +15,10 @@ func healthCheckReply(w http.ResponseWriter, r *http.Request) {
 }
 
 // HeartBeatService exposes an http healthcheck handler
-func HeartBeatService(c *config.KdnConfig) {
+func HeartBeatService(c *config.KdnConfig) error {
 	if c.HealthPort == 0 {
-		return
+		return nil
 	}
 	http.HandleFunc("/health", healthCheckReply)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", c.HealthPort), nil); err != nil {
-		panic(fmt.Sprintf("Failed to start http healtcheck: %s", err))
-	}
+	return http.ListenAndServe(fmt.Sprintf(":%d", c.HealthPort), nil)
 }
