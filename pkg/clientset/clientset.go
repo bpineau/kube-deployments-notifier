@@ -7,6 +7,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/util/homedir"
 
 	// Ensure we have GCP auth method linked in
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
@@ -14,8 +15,10 @@ import (
 
 func buildConfig(apiserver string, kubeconfig string) (*rest.Config, error) {
 	if kubeconfig == "" {
-		if _, err := os.Stat(filepath.Join(os.Getenv("HOME"), ".kube/config")); err == nil {
-			kubeconfig = filepath.Join(os.Getenv("HOME"), ".kube/config")
+		if home := homedir.HomeDir(); home != "" {
+			if _, err := os.Stat(filepath.Join(home, ".kube", "config")); err == nil {
+				kubeconfig = filepath.Join(home, ".kube", "config")
+			}
 		}
 	}
 

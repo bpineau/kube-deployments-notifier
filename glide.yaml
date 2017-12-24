@@ -10,14 +10,13 @@ import:
   - plugin/pkg/client/auth/gcp
   - rest
   - tools/clientcmd
+  - util/homedir
 - package: github.com/spf13/cobra
-  version: b78744579491c1ceeaaa3b40205e56b0591b93a3
+  version: ~0.0.1
 - package: github.com/spf13/viper
   version: ~1.0.0
 - package: github.com/spf13/pflag
   version: ~1.0.0
-- package: github.com/mitchellh/go-homedir
-  version: b8bc1bf767474819792c23f32d8286a45736f1c6
 - package: github.com/sirupsen/logrus
   version: ~1.0.3
 # See https://github.com/sirupsen/logrus/issues/553
