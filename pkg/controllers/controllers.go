@@ -40,6 +40,8 @@ type CommonController struct {
 	StopCh    chan struct{}
 	Notifiers notifiers.Notifier
 	wg        *sync.WaitGroup
+	initMu    sync.Mutex
+	syncInit  bool
 }
 
 // Start initialize and launch a controller goroutine.
@@ -47,7 +49,12 @@ func (c *CommonController) Start(wg *sync.WaitGroup) {
 	c.Conf.Logger.Infof("Starting %s controller", c.Name)
 
 	c.StopCh = make(chan struct{})
+
 	c.wg = wg
+
+	c.initMu.Lock()
+	c.syncInit = true
+	c.initMu.Unlock()
 
 	c.startInformer()
 
@@ -59,10 +66,19 @@ func (c *CommonController) Start(wg *sync.WaitGroup) {
 // Stop ends a controller and notify the controllers WaitGroup
 func (c *CommonController) Stop() {
 	c.Conf.Logger.Infof("Stopping %s controller", c.Name)
+
+	// don't stop while we're still starting
+	c.initMu.Lock()
+	for !c.syncInit {
+		time.Sleep(time.Millisecond)
+	}
+	c.initMu.Unlock()
+
 	close(c.StopCh)
 
 	// give everything 0.2s max to stop gracefully
 	time.Sleep(200 * time.Millisecond)
+
 	c.wg.Done()
 }
 
@@ -139,7 +155,6 @@ func (c *CommonController) processNextItem() bool {
 		// err != nil and too many retries
 		c.Conf.Logger.Errorf("Error processing %s (giving up): %v", key, err)
 		c.Queue.Forget(key)
-		utilruntime.HandleError(err)
 	}
 
 	return true

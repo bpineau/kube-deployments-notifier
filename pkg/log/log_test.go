@@ -47,7 +47,7 @@ func TestLog(t *testing.T) {
 		t.Error("The default output should be stderr")
 	}
 
-	logger = New("info", "192.0.2.0:514", "syslog")
+	logger = New("info", "127.0.0.1:514", "syslog")
 	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
 		t.Error("Failed to instantiate a syslog logger")
 	}
