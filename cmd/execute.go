@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"k8s.io/client-go/util/homedir"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
 	klog "github.com/bpineau/kube-deployments-notifier/pkg/log"
@@ -141,7 +141,7 @@ func initConfig() {
 
 	// all possible config file paths, by priority
 	viper.AddConfigPath("/etc/kdn/")
-	if home, err := homedir.Dir(); err == nil {
+	if home := homedir.HomeDir(); home != "" {
 		viper.AddConfigPath(home)
 	}
 	viper.AddConfigPath(".")
