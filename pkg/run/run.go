@@ -14,26 +14,30 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 )
 
-var conts = []controllers.Controller{
-	&deployment.Controller{},
-}
+var (
+	conts = []controllers.Controller{
+		&deployment.Controller{},
+	}
+)
 
 // Run launchs the effective controllers goroutines
-func Run(config *config.KdnConfig) {
+func Run(config *config.KdnConfig, notif notifiers.Notifier) {
 	wg := sync.WaitGroup{}
 	wg.Add(len(conts))
 	defer wg.Wait()
 
-	notifiers := notifiers.Init(notifiers.Backends)
-
 	for _, c := range conts {
-		go c.Init(config, notifiers).Start(&wg)
+		go c.Init(config, notif).Start(&wg)
 		defer func(c controllers.Controller) {
 			go c.Stop()
 		}(c)
 	}
 
-	go log.Println(health.HeartBeatService(config))
+	go func() {
+		if err := health.HeartBeatService(config); err != nil {
+			log.Fatal("Healtcheck service failed: ", err)
+		}
+	}()
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGTERM)

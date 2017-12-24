@@ -9,5 +9,6 @@ install:
 script:
   - make lint
   - make test
+  - make coverall
   - make install
 

@@ -24,18 +24,22 @@ type KdnConfig struct {
 }
 
 // Init initialize the configuration (creating the ClientSet for the cluster)
-func (c *KdnConfig) Init(apiserver string, kubeconfig string) {
+func (c *KdnConfig) Init(apiserver string, kubeconfig string) error {
 	var err error
 
-	c.ClientSet, err = clientset.NewClientSet(apiserver, kubeconfig)
-	if err != nil {
-		panic(fmt.Errorf("Failed init Kubernetes clientset: %+v", err))
+	if c.ClientSet == nil {
+		c.ClientSet, err = clientset.NewClientSet(apiserver, kubeconfig)
+		if err != nil {
+			return fmt.Errorf("Failed init Kubernetes clientset: %+v", err)
+		}
 	}
 
+	// better fail early, if we can't talk to the cluster's api
 	_, err = c.ClientSet.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
-		panic(fmt.Errorf("Failed to query Kubernetes api-server: %+v", err))
+		return fmt.Errorf("Failed to query Kubernetes api-server: %+v", err)
 	}
 
 	c.Logger.Info("Kubernetes clientset initialized")
+	return nil
 }
