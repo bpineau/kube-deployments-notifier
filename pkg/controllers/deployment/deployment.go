@@ -5,10 +5,10 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 
+	appsv1beta1 "k8s.io/api/apps/v1beta1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
-	appsv1beta1 "k8s.io/client-go/pkg/apis/apps/v1beta1"
 	"k8s.io/client-go/tools/cache"
 )
 

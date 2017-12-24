@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"k8s.io/api/apps/v1beta1"
+	"k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/pkg/api/v1"
-	"k8s.io/client-go/pkg/apis/apps/v1beta1"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers/count"
