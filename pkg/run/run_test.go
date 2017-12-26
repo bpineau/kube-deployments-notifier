@@ -10,6 +10,8 @@ import (
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
+	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
+	"github.com/bpineau/kube-deployments-notifier/pkg/controllers/deployment"
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers/count"
 )
 
@@ -23,6 +25,20 @@ var (
 
 func TestRun(t *testing.T) {
 	conf := config.FakeConfig(obj1)
+	runFromConf(t, conf)
+}
+
+func TestRunFailingHealthcheck(t *testing.T) {
+	conf := config.FakeConfig(obj1)
+	conf.Endpoint = ""
+	conf.HealthPort = -1
+	runFromConf(t, conf)
+}
+
+func runFromConf(t *testing.T, conf *config.KdnConfig) {
+	conts = []controllers.Controller{
+		&deployment.Controller{},
+	}
 	notif := new(count.Notifier)
 	go Run(conf, notif)
 
@@ -38,7 +54,7 @@ func TestRun(t *testing.T) {
 
 	select {
 	case res := <-ch:
-		if res < 1 {
+		if res != 1 {
 			t.Errorf("Failed to convert an event to a notification")
 		}
 	case <-time.After(10 * time.Second):
@@ -46,4 +62,5 @@ func TestRun(t *testing.T) {
 	}
 
 	syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
+	time.Sleep(300 * time.Millisecond) // controllers wait for 200ms before stopping
 }

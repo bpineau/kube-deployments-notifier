@@ -1,7 +1,6 @@
 package run
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"sync"
@@ -35,7 +34,7 @@ func Run(config *config.KdnConfig, notif notifiers.Notifier) {
 
 	go func() {
 		if err := health.HeartBeatService(config); err != nil {
-			log.Fatal("Healtcheck service failed: ", err)
+			config.Logger.Warningf("Healtcheck service failed: %s", err)
 		}
 	}()
 
