@@ -14,6 +14,12 @@ func TestConfig(t *testing.T) {
 		t.Error("Failed to initialize a fake config object")
 	}
 
+	// test config's provided FakeClientSet we'll use throughout this file
+	cs := FakeClientSet()
+	if fmt.Sprintf("%T", cs) != "*fake.Clientset" {
+		t.Errorf("FakeClientSet() failed")
+	}
+
 	// test with the fake clientset (should panic on error)
 	err := conf.Init("", "")
 	if err != nil {

@@ -8,9 +8,13 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/config"
 )
 
-func healthCheckReply(w http.ResponseWriter, r *http.Request) {
+type healthHandler struct {
+	conf *config.KdnConfig
+}
+
+func (h *healthHandler) healthCheckReply(w http.ResponseWriter, r *http.Request) {
 	if _, err := io.WriteString(w, "ok\n"); err != nil {
-		fmt.Printf("Failed to reply to http healtcheck: %s\n", err)
+		h.conf.Logger.Warningf("Failed to reply to http healtcheck from %s: %s\n", r.RemoteAddr, err)
 	}
 }
 
@@ -19,6 +23,7 @@ func HeartBeatService(c *config.KdnConfig) error {
 	if c.HealthPort == 0 {
 		return nil
 	}
-	http.HandleFunc("/health", healthCheckReply)
+	hh := healthHandler{conf: c}
+	http.HandleFunc("/health", hh.healthCheckReply)
 	return http.ListenAndServe(fmt.Sprintf(":%d", c.HealthPort), nil)
 }
