@@ -98,11 +98,12 @@ spec:
     spec:
       containers:
         - name: kube-deployments-notifier
-          image: bpineau/kube-deployments-notifier:0.2.0
+          image: bpineau/kube-deployments-notifier:0.3.0
           args:
-            - --filter 'vendor=mycompany,app!=mmp-database'
-            - --endpoint https://myapiserver
-            - --healthcheck-port 8080
+            - --log-output=stdout
+            - --filter=vendor=mycompany,app!=mmp-database
+            - --endpoint=http://mycollector
+            - --healthcheck-port=8080
           resources:
             requests:
               cpu: 0.1
