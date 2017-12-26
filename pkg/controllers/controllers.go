@@ -174,7 +174,8 @@ func (c *CommonController) processItem(key string) error {
 	jobj := fmt.Sprintf("%s", res)
 
 	if !exists {
-		return c.Notifiers.Deleted(c.Conf, fmt.Sprintf(`{"name":"%s"}`, key))
+		return c.Notifiers.Deleted(c.Conf,
+			fmt.Sprintf(`{"kind":"%s", "name":"%s"}`, c.Name, key))
 	}
 
 	return c.Notifiers.Changed(c.Conf, jobj)
