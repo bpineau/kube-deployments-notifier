@@ -1,3 +1,4 @@
+// Package log initialize and configure a logrus logger.
 package log
 
 import (
@@ -12,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus/hooks/test"
 )
 
-// New initialize logrus and return a new logger
+// New initialize logrus and return a new logger.
 func New(logLevel string, logServer string, logOutput string) *logrus.Logger {
 	level, err := logrus.ParseLevel(logLevel)
 	if err != nil {

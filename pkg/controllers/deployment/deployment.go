@@ -12,13 +12,13 @@ import (
 	"k8s.io/client-go/tools/cache"
 )
 
-// Controller monitors deployments
+// Controller monitors Kubernetes' deployments objects in the cluster
 type Controller struct {
 	// https://golang.org/doc/effective_go.html#embedding
 	controllers.CommonController
 }
 
-// Init initialize deployment controller
+// Init initialize controller
 func (c *Controller) Init(conf *config.KdnConfig, n notifiers.Notifier) controllers.Controller {
 	c.CommonController = controllers.CommonController{
 		Conf:      conf,

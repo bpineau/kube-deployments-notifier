@@ -1,3 +1,4 @@
+// Package health serves healthchecks over HTTP at /health endpoint.
 package health
 
 import (
