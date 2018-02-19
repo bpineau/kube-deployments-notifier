@@ -1,3 +1,7 @@
+// Package controllers is responsible for watching resources and calling
+// notifiers on creation/change/deletion events. Each controller
+// (implementing the Controller interface) watchs for a specific
+// Kubernetes object (ie. deployments).
 package controllers
 
 import (
@@ -21,15 +25,16 @@ var (
 )
 
 // Controller are started in a persistent goroutine at program launch,
-// and are responsible for watching resources and calling notifiers.
+// and are responsible for watching resources, and for calling notifiers
+// when those resources changes.
 type Controller interface {
 	Start(wg *sync.WaitGroup)
 	Stop()
 	Init(c *config.KdnConfig, n notifiers.Notifier) Controller
 }
 
-// CommonController groups fields and funcs that most controllers would
-// like to implement (controllers in the Kubernetes' client-go sense).
+// CommonController implements the core reusable and generic primitives
+// of a controller, and can be embedded by real controllers.
 type CommonController struct {
 	Conf      *config.KdnConfig
 	Queue     workqueue.RateLimitingInterface
@@ -44,7 +49,9 @@ type CommonController struct {
 	syncInit  bool
 }
 
-// Start initialize and launch a controller goroutine.
+// Start initialize and launch a controller. The sync.WaitGroup
+// argument is expected to be aknowledged (Done()) at controller
+// termination, when Stop() is called.
 func (c *CommonController) Start(wg *sync.WaitGroup) {
 	c.Conf.Logger.Infof("Starting %s controller", c.Name)
 
@@ -63,7 +70,7 @@ func (c *CommonController) Start(wg *sync.WaitGroup) {
 	<-c.StopCh
 }
 
-// Stop ends a controller and notify the controllers WaitGroup
+// Stop ends a controller and notify the controller's WaitGroup
 func (c *CommonController) Stop() {
 	c.Conf.Logger.Infof("Stopping %s controller", c.Name)
 

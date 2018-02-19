@@ -12,7 +12,7 @@ type Notifier struct {
 	counter int
 }
 
-// Changed increment the event counter
+// Changed increment an event counter
 func (l *Notifier) Changed(c *config.KdnConfig, msg string) error {
 	l.Lock()
 	l.counter++
@@ -20,7 +20,7 @@ func (l *Notifier) Changed(c *config.KdnConfig, msg string) error {
 	return nil
 }
 
-// Deleted increment the event counter
+// Deleted increment an event counter
 func (l *Notifier) Deleted(c *config.KdnConfig, msg string) error {
 	l.Lock()
 	l.counter++
@@ -28,7 +28,7 @@ func (l *Notifier) Deleted(c *config.KdnConfig, msg string) error {
 	return nil
 }
 
-// Count return the number of notification handled
+// Count return the current notifications counter value.
 func (l *Notifier) Count() int {
 	l.RLock()
 	defer l.RUnlock()

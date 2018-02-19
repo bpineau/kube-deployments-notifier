@@ -1,3 +1,6 @@
+// Package http notifier convey events notifications as json payloads to a
+// configured HTTP API endpoint. Changes/creation notifications are sent
+// with POST requests, while deletion are sent with DELETE requests.
 package http
 
 import (
@@ -9,16 +12,16 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/config"
 )
 
-// Notifier implements notifiers.Notifier
+// Notifier implements notifiers.Notifier.
 type Notifier struct {
 }
 
-// Changed sends notification to the configured logrus logger
+// Changed sends a notification to the configured HTTP API endpoint.
 func (l *Notifier) Changed(c *config.KdnConfig, msg string) error {
 	return l.push(c, "POST", msg)
 }
 
-// Deleted sends notification to the configured logrus logger
+// Deleted sends a notification to the configured HTTP API endpoint.
 func (l *Notifier) Deleted(c *config.KdnConfig, msg string) error {
 	return l.push(c, "DELETE", msg)
 }

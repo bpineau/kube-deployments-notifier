@@ -1,3 +1,5 @@
+// Package run implements the main kube-deployments-controller's loop, by
+// launching the healthcheck service and all known controllers.
 package run
 
 import (

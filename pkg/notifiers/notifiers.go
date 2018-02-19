@@ -10,25 +10,27 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers/null"
 )
 
-// Notifier sends message to the API endpoint (or other backend)
+// Notifier convey Kubernetes events (creation/changes, deletion)
+// as messages to dedicated backends (like an API endpoint).
 type Notifier interface {
 	Changed(c *config.KdnConfig, msg string) error
 	Deleted(c *config.KdnConfig, msg string) error
 }
 
-// Fakes map all test, fake notifiers
+// Fakes map all test, fake Notifiers.
 var Fakes = []Notifier{
 	&count.Notifier{},
 	&null.Notifier{},
 }
 
-// Backends maps all real, effective notifiers
+// Backends maps all real, effective Notifiers.
 var Backends = []Notifier{
 	&log.Notifier{},
 	&http.Notifier{},
 }
 
-// Composite combine and chain several notifiers
+// Composite combine and chain several Notifiers, while implementing the
+// Notifier interface itself.
 type Composite struct {
 	Notifiers []Notifier
 }
@@ -38,12 +40,12 @@ func Init(notifiers []Notifier) *Composite {
 	return &Composite{Notifiers: notifiers}
 }
 
-// Changed send creation/change events to the notifiers
+// Changed send creation/change events notifications to the Notifier.
 func (n *Composite) Changed(c *config.KdnConfig, msg string) error {
 	return n.invoke("Changed", c, msg)
 }
 
-// Deleted send deletion events to the notifiers
+// Deleted send deletion events notifications to the Notifier.
 func (n *Composite) Deleted(c *config.KdnConfig, msg string) error {
 	return n.invoke("Deleted", c, msg)
 }

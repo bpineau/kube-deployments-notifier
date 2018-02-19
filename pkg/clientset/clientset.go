@@ -1,3 +1,5 @@
+// Package clientset initialize a Kubernete's client-go "clientset" (an initialized
+// connection to the Kubernete's api-server) according the configuration.
 package clientset
 
 import (
@@ -29,8 +31,9 @@ func buildConfig(apiserver string, kubeconfig string) (*rest.Config, error) {
 	return rest.InClusterConfig()
 }
 
-// NewClientSet create a clientset for the optional apiserver or kubeconfig configs,
-// defaulting to the automatic, in cluster settings.
+// NewClientSet create a clientset (a client connection to a Kubernetes cluster).
+// It will connect using the optional apiserver or kubeconfig options, or will
+// default to the automatic, in cluster settings.
 func NewClientSet(apiserver string, kubeconfig string) (*kubernetes.Clientset, error) {
 	config, err := buildConfig(apiserver, kubeconfig)
 	if err != nil {
