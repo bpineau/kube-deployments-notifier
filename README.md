@@ -79,7 +79,7 @@ A ready to use, public docker image is available at [Docker Hub](https://hub.doc
 You can use it directly from your Kubernetes deployments, ie.
 
 ```yaml
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kube-deployments-notifier
