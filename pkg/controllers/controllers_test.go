@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
@@ -107,9 +107,6 @@ func TestController(t *testing.T) {
 	n := new(count.Notifier)
 	cont := &testController{}
 	cont.Init(c, n)
-	if cont == nil {
-		t.Errorf("Failed to initialize a test pod controller")
-	}
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
@@ -127,7 +124,10 @@ func TestController(t *testing.T) {
 
 	// test deletion
 	store := cont.Informer.GetStore()
-	store.Delete(obj2)
+	err := store.Delete(obj2)
+	if err != nil {
+		t.Fatalf("Unexcepted error %v", err)
+	}
 	time.Sleep(config.FakeResyncInterval + config.FakeResyncInterval/2)
 
 	if n.Count() < 5 {
@@ -140,7 +140,10 @@ func TestController(t *testing.T) {
 	// test retries on notifiers failure
 	fnotif := new(failingNotifier)
 	cont.Notifiers = fnotif
-	store.Add(obj4)
+	err = store.Add(obj4)
+	if err != nil {
+		t.Fatalf("Unexcepted error %v", err)
+	}
 
 	time.Sleep(config.FakeResyncInterval + config.FakeResyncInterval/2)
 	if fnotif.countChange() < maxProcessRetry {
