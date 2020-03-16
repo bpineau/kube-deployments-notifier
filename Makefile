@@ -3,7 +3,6 @@ all: build
 
 tools:
 	which gometalinter || ( go get -u github.com/alecthomas/gometalinter && gometalinter --install )
-	which glide || go get -u github.com/Masterminds/glide
 	which goveralls || go get github.com/mattn/goveralls
 
 lint:
@@ -31,9 +30,6 @@ lint:
 
 fmt:
 	go fmt ./...
-
-deps:
-	glide install
 
 build:
 	env CGO_ENABLED=0 go build -i
