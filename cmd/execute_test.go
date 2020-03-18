@@ -47,7 +47,7 @@ func TestRootCmd(t *testing.T) {
 			t.Errorf("Failed to execute the main command: %+v", err)
 		}
 	case <-time.After(time.Second):
-		syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
+		syscall.Kill(syscall.Getpid(), syscall.SIGTERM) //nolint:errcheck - it's a test don't need to over check
 	case <-time.After(10 * time.Second):
 		t.Error("Timeout waiting for the execute command to exit after SIGTERM")
 	}

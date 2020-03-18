@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"k8s.io/api/apps/v1beta1"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/bpineau/kube-deployments-notifier/config"
@@ -25,9 +25,6 @@ func TestDeployment(t *testing.T) {
 	notif := new(count.Notifier)
 	cont := new(Controller)
 	cont.Init(config.FakeConfig(obj1), notif)
-	if cont == nil {
-		t.Errorf("Failed to create a deployment controller")
-	}
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
