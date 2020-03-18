@@ -2,11 +2,11 @@
 all: build
 
 tools:
-	which gometalinter || ( go get -u github.com/alecthomas/gometalinter && gometalinter --install )
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.16.0
 	which goveralls || go get github.com/mattn/goveralls
 
 lint:
-	gometalinter --concurrency=1 --deadline=300s --vendor --disable-all \
+	./bin/golangci-lint run --concurrency=1 --disable-all \
 		--enable=golint \
 		--enable=vet \
 		--enable=vetshadow \
@@ -16,7 +16,6 @@ lint:
 		--enable=deadcode \
 		--enable=ineffassign \
 		--enable=dupl \
-		--enable=gotype \
 		--enable=varcheck \
 		--enable=interfacer \
 		--enable=goconst \
@@ -25,8 +24,7 @@ lint:
 		--enable=misspell \
 		--enable=gas \
 		--enable=goimports \
-		--enable=gocyclo \
-		./...
+		--enable=gocyclo
 
 fmt:
 	go fmt ./...

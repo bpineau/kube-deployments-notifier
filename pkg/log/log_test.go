@@ -48,23 +48,24 @@ func TestLog(t *testing.T) {
 	}
 
 	logger = New("info", "127.0.0.1:514", "syslog")
-	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
+	logrusLoggerPattern := "*logrus.Logger"
+	if fmt.Sprintf("%T", logger) != logrusLoggerPattern {
 		t.Error("Failed to instantiate a syslog logger")
 	}
 
 	logger = New("info", "", "stdout")
-	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
+	if fmt.Sprintf("%T", logger) != logrusLoggerPattern {
 		t.Error("Failed to instantiate a stdout logger")
 	}
 
 	logger = New("info", "", "stderr")
-	if fmt.Sprintf("%T", logger) != "*logrus.Logger" {
+	if fmt.Sprintf("%T", logger) != logrusLoggerPattern {
 		t.Error("Failed to instantiate a stderr logger")
 	}
 
 	for _, level := range levels {
 		lg := New(level, "", "test")
-		if fmt.Sprintf("%T", lg) != "*logrus.Logger" {
+		if fmt.Sprintf("%T", lg) != logrusLoggerPattern {
 			t.Errorf("Failed to instantiate at %s level", level)
 		}
 	}
