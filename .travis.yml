@@ -4,7 +4,6 @@ go:
 
 install:
   - make tools
-  - make deps
 
 script:
   - make lint
