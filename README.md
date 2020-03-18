@@ -9,10 +9,9 @@ them as json payload to a remote API endpoint.
 
 ## Build
 
-Assuming you have go 1.9 and glide in the path, and GOPATH configured:
+Assuming you have go 1.14:
 
 ```shell
-make deps
 make build
 ```
 

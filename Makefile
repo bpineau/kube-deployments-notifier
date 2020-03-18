@@ -3,7 +3,6 @@ all: build
 
 tools:
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.16.0
-	which glide || go get -u github.com/Masterminds/glide
 	which goveralls || go get github.com/mattn/goveralls
 
 lint:
@@ -29,9 +28,6 @@ lint:
 
 fmt:
 	go fmt ./...
-
-deps:
-	glide install
 
 build:
 	env CGO_ENABLED=0 go build -i

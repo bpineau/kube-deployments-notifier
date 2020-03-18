@@ -1,10 +1,9 @@
 language: go
 go:
-  - 1.9.x
+  - 1.14.x
 
 install:
   - make tools
-  - make deps
 
 script:
   - make lint

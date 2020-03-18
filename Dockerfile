@@ -1,8 +1,6 @@
-FROM golang:1.9.2 as builder
+FROM golang:1.14.0 as builder
 WORKDIR /go/src/github.com/bpineau/kube-deployments-notifier
 COPY . .
-RUN go get -u github.com/Masterminds/glide
-RUN make deps
 RUN make build
 
 FROM alpine:3.7
