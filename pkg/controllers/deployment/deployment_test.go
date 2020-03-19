@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/apps/v1beta1"
+	apps_v1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	obj1 = &v1beta1.Deployment{ObjectMeta: meta_v1.ObjectMeta{
+	obj1 = &apps_v1.Deployment{ObjectMeta: meta_v1.ObjectMeta{
 		Name:      "test1",
 		Labels:    config.Labels,
 		Namespace: v1.NamespaceDefault},

@@ -5,7 +5,7 @@ import (
 	"github.com/bpineau/kube-deployments-notifier/pkg/controllers"
 	"github.com/bpineau/kube-deployments-notifier/pkg/notifiers"
 
-	appsv1beta1 "k8s.io/api/apps/v1beta1"
+	apps_v1 "k8s.io/api/apps/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
@@ -27,14 +27,14 @@ func (c *Controller) Init(conf *config.KdnConfig, n notifiers.Notifier) controll
 	}
 
 	client := c.Conf.ClientSet
-	c.ObjType = &appsv1beta1.Deployment{}
+	c.ObjType = &apps_v1.Deployment{}
 	selector := meta_v1.ListOptions{LabelSelector: conf.Filter}
 	c.ListWatch = &cache.ListWatch{
 		ListFunc: func(options meta_v1.ListOptions) (runtime.Object, error) {
-			return client.AppsV1beta1().Deployments(meta_v1.NamespaceAll).List(selector)
+			return client.AppsV1().Deployments(meta_v1.NamespaceAll).List(selector)
 		},
 		WatchFunc: func(options meta_v1.ListOptions) (watch.Interface, error) {
-			return client.AppsV1beta1().Deployments(meta_v1.NamespaceAll).Watch(selector)
+			return client.AppsV1().Deployments(meta_v1.NamespaceAll).Watch(selector)
 		},
 	}
 
