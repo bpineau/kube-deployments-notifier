@@ -14,9 +14,9 @@ release:
   draft: true
 
 dockers:
-  -
-    image: bpineau/kube-deployments-notifier
+  - image_templates:
+    - "bpineau/kube-deployments-notifier:latest"
+    - "bpineau/kube-deployments-notifier:{{ .Tag }}"
     goos: linux
     goarch: amd64
-    latest: true
     dockerfile: Dockerfile.goreleaser
