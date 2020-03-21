@@ -19,7 +19,7 @@ make build
 
 The daemon may run either as a pod, or outside of the Kubernetes cluster.
 He should find the Kubernetes api-server automatically (or you can use the
-"-s" or "-k" flags). You can pass parameters from cli args, env, config
+"-s", "-x" or "-k" flags). You can pass parameters from cli args, env, config
 files, or both.
 
 Example:
@@ -96,9 +96,10 @@ spec:
       labels:
         k8s-app: kube-deployments-notifier
     spec:
+      serviceAccountName: kube-deployments-notifier
       containers:
         - name: kube-deployments-notifier
-          image: bpineau/kube-deployments-notifier:0.3.0
+          image: bpineau/kube-deployments-notifier:v0.6.0
           args:
             - --log-output=stdout
             - --filter=vendor=mycompany,app!=mmp-database
@@ -117,4 +118,41 @@ spec:
               port: 8080
             timeoutSeconds: 5
             initialDelaySeconds: 10
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-deployments-notifier
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-deployments-notifier
+  namespace: kube-system
+rules:
+- apiGroups:
+  - ""
+  - apps
+  resources:
+  - namespaces
+  - deployments
+  verbs:
+  - list
+  - get
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-deployments-notifier
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-deployments-notifier
+subjects:
+- kind: ServiceAccount
+  name: kube-deployments-notifier
+  namespace: kube-system
 ```
