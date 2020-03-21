@@ -18,7 +18,7 @@ func TestConfig(t *testing.T) {
 	}
 
 	// test with the fake clientset (should panic on error)
-	err := conf.Init("", "")
+	err := conf.Init("", "", "")
 	if err != nil {
 		t.Errorf("Failed to initialize conf: %+v", err)
 	}

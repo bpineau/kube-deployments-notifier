@@ -3,41 +3,36 @@
 package clientset
 
 import (
-	"os"
-	"path/filepath"
-
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/util/homedir"
 
-	// Ensure we have GCP auth method linked in
+	// Ensure we have various auth method linked in
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
-
-func buildConfig(apiserver string, kubeconfig string) (*rest.Config, error) {
-	if kubeconfig == "" {
-		if home := homedir.HomeDir(); home != "" {
-			if _, err := os.Stat(filepath.Join(home, ".kube", "config")); err == nil {
-				kubeconfig = filepath.Join(home, ".kube", "config")
-			}
-		}
-	}
-
-	if apiserver != "" || kubeconfig != "" {
-		return clientcmd.BuildConfigFromFlags(apiserver, kubeconfig)
-	}
-
-	return rest.InClusterConfig()
-}
 
 // NewClientSet create a clientset (a client connection to a Kubernetes cluster).
 // It will connect using the optional apiserver or kubeconfig options, or will
 // default to the automatic, in cluster settings.
-func NewClientSet(apiserver string, kubeconfig string) (*kubernetes.Clientset, error) {
-	config, err := buildConfig(apiserver, kubeconfig)
+func NewClientSet(apiserver, context, kubeconfig string) (*kubernetes.Clientset, error) {
+	overrides := clientcmd.ConfigOverrides{}
+	loader := clientcmd.NewDefaultClientConfigLoadingRules()
+	if kubeconfig != "" {
+		loader.ExplicitPath = kubeconfig
+	}
+
+	if context != "" {
+		overrides.CurrentContext = context
+	}
+
+	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loader, &overrides).ClientConfig()
+
 	if err != nil {
 		return nil, err
+	}
+
+	if apiserver != "" {
+		config.Host = apiserver
 	}
 
 	return kubernetes.NewForConfig(config)
