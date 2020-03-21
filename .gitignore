@@ -6,4 +6,5 @@
 /vendor/
 dist/*
 bin/*
+profile.cov
 kube-deployments-notifier
