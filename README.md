@@ -1,6 +1,6 @@
 # kube-deployments-notifier
 
-[![Build Status](https://travis-ci.org/bpineau/kube-deployments-notifier.svg?branch=master)](https://travis-ci.org/bpineau/kube-deployments-notifier)
+[![Build Status](https://github.com/bpineau/kube-deployments-notifier/workflows/CI/badge.svg)](https://github.com/bpineau/kube-deployments-notifier/actions)
 [![Coverage Status](https://coveralls.io/repos/github/bpineau/kube-deployments-notifier/badge.svg?branch=master)](https://coveralls.io/github/bpineau/kube-deployments-notifier?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bpineau/kube-deployments-notifier)](https://goreportcard.com/report/github.com/bpineau/kube-deployments-notifier)
 

@@ -17,7 +17,7 @@ ${GOPATH}/bin/goveralls:
 tools: bin/golangci-lint ${GOPATH}/bin/goveralls
 
 lint: tools
-	./bin/golangci-lint run --concurrency=1 --timeout=300s --disable-all \
+	./bin/golangci-lint run --concurrency=1 --timeout=600s --disable-all \
 		--enable=golint \
 		--enable=vet \
 		--enable=vetshadow \
@@ -35,6 +35,9 @@ lint: tools
 		--enable=misspell \
 		--enable=gas \
 		--enable=goimports \
+		--enable=errcheck \
+		--enable=staticcheck \
+		--enable=unused \
 		--enable=gocyclo
 
 fmt:
@@ -47,14 +50,13 @@ install:
 	env CGO_ENABLED=0 go install
 
 clean:
-	rm -rf dist/ bin/
+	rm -rf dist/ bin/ profile.cov
 	go clean -i
 
 coverall: ${GOPATH}/bin/goveralls
-	goveralls -service=travis-ci -package github.com/bpineau/kube-deployments-notifier/pkg/...
+	${GOPATH}/bin/goveralls -coverprofile=profile.cov -service=github
 
 test:
-	go test github.com/bpineau/kube-deployments-notifier/...
-	go test -race -cover github.com/bpineau/kube-deployments-notifier/...
+	go test -covermode atomic -coverprofile=profile.cov ./...
 
-.PHONY: tools lint fmt install clean coverall test all ${GOPATH}/bin/goveralls bin/golangci-lint
+.PHONY: tools lint fmt install clean coverall test all

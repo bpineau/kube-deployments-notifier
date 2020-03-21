@@ -5,8 +5,6 @@ import (
 	"testing"
 )
 
-const nonExistentPath = "\\/hopefully/non/existent/path"
-
 func TestConfig(t *testing.T) {
 	conf := FakeConfig()
 	if conf == nil {
@@ -24,7 +22,7 @@ func TestConfig(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to initialize conf: %+v", err)
 	}
-	if fmt.Sprintf("%T", conf.ClientSet) != "*fake.Clientset" {
+	if conf == nil || conf.ClientSet == nil || fmt.Sprintf("%T", conf.ClientSet) != "*fake.Clientset" { //nolint:staticcheck
 		t.Errorf("conf.Init() shouldn't overwrite an existing ClientSet")
 	}
 }

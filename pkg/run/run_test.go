@@ -61,6 +61,6 @@ func runFromConf(t *testing.T, conf *config.KdnConfig) {
 		t.Error("Timeout waiting for a event to pop up as a notification")
 	}
 
-	syscall.Kill(syscall.Getpid(), syscall.SIGTERM) //nolint:errcheck - it's a test don't need to over check
+	syscall.Kill(syscall.Getpid(), syscall.SIGTERM) //nolint:errcheck
 	time.Sleep(300 * time.Millisecond)              // controllers wait for 200ms before stopping
 }
