@@ -3,20 +3,30 @@ builds:
     ldflags: -s -w -X github.com/bpineau/kube-deployments-notifier/cmd.version={{.Version}}
     env:
       - CGO_ENABLED=0
+      - GO111MODULE=on
     goos:
       - darwin
       - linux
     goarch:
       - amd64
 
-release:
-  # don't autopublish
-  draft: true
+before:
+  hooks:
+  - go mod download
+
+#release:
+#  # don't autopublish
+#  draft: true
+
+changelog:
+  filters:
+    exclude:
+      - Merge
 
 dockers:
-  -
-    image: bpineau/kube-deployments-notifier
+  - image_templates:
+    - "bpineau/kube-deployments-notifier:latest"
+    - "bpineau/kube-deployments-notifier:{{ .Tag }}"
     goos: linux
     goarch: amd64
-    latest: true
     dockerfile: Dockerfile.goreleaser
