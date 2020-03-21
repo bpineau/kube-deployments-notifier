@@ -5,4 +5,5 @@
 *.swo
 /vendor/
 dist/*
+bin/*
 kube-deployments-notifier
