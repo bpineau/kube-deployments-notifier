@@ -17,7 +17,7 @@ ${GOPATH}/bin/goveralls:
 tools: bin/golangci-lint ${GOPATH}/bin/goveralls
 
 lint: tools
-	./bin/golangci-lint run --concurrency=1 --timeout=600s --disable-all \
+	./bin/golangci-lint run --concurrency=4 --timeout=600s --disable-all \
 		--enable=golint \
 		--enable=vet \
 		--enable=vetshadow \
@@ -30,14 +30,11 @@ lint: tools
 		--enable=varcheck \
 		--enable=interfacer \
 		--enable=goconst \
-		--enable=megacheck \
 		--enable=unparam \
 		--enable=misspell \
 		--enable=gas \
 		--enable=goimports \
-		--enable=errcheck \
 		--enable=staticcheck \
-		--enable=unused \
 		--enable=gocyclo
 
 fmt:
