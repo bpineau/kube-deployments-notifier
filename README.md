@@ -37,6 +37,7 @@ Usage:
 
 Flags:
   -s, --api-server string      kube api server url
+  -x, --context string         kube context
   -c, --config string          configuration file (default "/etc/kdn/kube-deployments-notifier.yaml")
   -d, --dry-run                dry-run mode
   -e, --endpoint string        API endpoint

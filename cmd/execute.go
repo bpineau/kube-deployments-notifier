@@ -24,6 +24,7 @@ var (
 
 	cfgFile   string
 	apiServer string
+	context   string
 	kubeConf  string
 	dryRun    bool
 	logLevel  string
@@ -67,7 +68,11 @@ var (
 			if FakeCS {
 				conf.ClientSet = config.FakeClientSet()
 			}
-			err := conf.Init(viper.GetString("api-server"), viper.GetString("kube-config"))
+			err := conf.Init(
+				viper.GetString("api-server"),
+				viper.GetString("context"),
+				viper.GetString("kube-config"),
+			)
 			if err != nil {
 				return fmt.Errorf("Failed to initialize the configuration: %+v", err)
 			}
@@ -97,6 +102,9 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVarP(&apiServer, "api-server", "s", "", "kube api server url")
 	bindPFlag("api-server", "api-server")
+
+	RootCmd.PersistentFlags().StringVarP(&context, "context", "x", "", "kube context")
+	bindPFlag("context", "context")
 
 	RootCmd.PersistentFlags().StringVarP(&kubeConf, "kube-config", "k", "", "kube config path")
 	bindPFlag("kube-config", "kube-config")
