@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"testing"
 )
 
@@ -27,21 +26,5 @@ func TestConfig(t *testing.T) {
 	}
 	if fmt.Sprintf("%T", conf.ClientSet) != "*fake.Clientset" {
 		t.Errorf("conf.Init() shouldn't overwrite an existing ClientSet")
-	}
-
-	// test with a real clientset
-	conf.ClientSet = nil
-	here, _ := os.Getwd()
-	os.Setenv("HOME", here+"/../..")
-	_ = conf.Init("http://127.0.0.1", "/dev/null")
-	if fmt.Sprintf("%T", conf.ClientSet) != "*kubernetes.Clientset" {
-		t.Errorf("Should have a real *kubernetes.Clientset")
-	}
-
-	// ensure we raise an error if the provided config file is unreachable
-	conf.ClientSet = nil
-	err = conf.Init("http://127.0.0.1", nonExistentPath)
-	if err == nil {
-		t.Fatal("conf.Init() should fail on non existent kubeconfig path")
 	}
 }

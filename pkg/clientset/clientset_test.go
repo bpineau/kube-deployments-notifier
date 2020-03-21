@@ -1,7 +1,6 @@
 package clientset
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -9,22 +8,7 @@ import (
 const nonExistentPath = "\\/hopefully/non/existent/path"
 
 func TestClientSet(t *testing.T) {
-	here, _ := os.Getwd()
-	os.Setenv("HOME", here+"/../..")
-	cs, err := NewClientSet("", "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if fmt.Sprintf("%T", cs) != "*kubernetes.Clientset" {
-		t.Errorf("NewClientSet() didn't return a *kubernetes.Clientset: %T", cs)
-	}
-
-	cs, _ = NewClientSet("http://127.0.0.1", "/dev/null")
-	if fmt.Sprintf("%T", cs) != "*kubernetes.Clientset" {
-		t.Errorf("NewClientSet(server) didn't return a *kubernetes.Clientset: %T", cs)
-	}
-
-	_, err = NewClientSet("http://127.0.0.1", nonExistentPath)
+	_, err := NewClientSet("http://127.0.0.1", nonExistentPath)
 	if err == nil {
 		t.Fatal("NewClientSet() should fail on non existent kubeconfig path")
 	}
