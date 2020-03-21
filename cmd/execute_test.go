@@ -51,29 +51,6 @@ func TestRootCmd(t *testing.T) {
 	case <-time.After(10 * time.Second):
 		t.Error("Timeout waiting for the execute command to exit after SIGTERM")
 	}
-
-	FakeCS = false
-
-	RootCmd.SetArgs([]string{
-		"--dry-run",
-		"--api-server",
-		"http://127.0.0.1",
-		"--config",
-		"\\/non/existent/path",
-	})
-	if err := Execute(); err == nil {
-		t.Error("Execute() should fail with unreachable config file path")
-	}
-
-	RootCmd.SetArgs([]string{
-		"--dry-run",
-		"--api-server",
-		"http://127.0.0.1",
-		"--config",
-	})
-	if err := Execute(); err == nil {
-		t.Error("Execute() should fail with missing flags arguments")
-	}
 }
 
 func TestVersion(t *testing.T) {
