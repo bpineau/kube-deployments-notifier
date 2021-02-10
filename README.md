@@ -79,6 +79,7 @@ A ready to use, public docker image is available at [Docker Hub](https://hub.doc
 You can use it directly from your Kubernetes deployments, ie.
 
 ```yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -132,16 +133,16 @@ metadata:
   name: kube-deployments-notifier
   namespace: kube-system
 rules:
-- apiGroups:
-  - ""
-  - apps
-  resources:
-  - namespaces
-  - deployments
-  verbs:
-  - list
-  - get
-  - watch
+  - apiGroups:
+      - ""
+      - apps
+    resources:
+      - namespaces
+      - deployments
+    verbs:
+      - list
+      - get
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -152,7 +153,7 @@ roleRef:
   kind: ClusterRole
   name: kube-deployments-notifier
 subjects:
-- kind: ServiceAccount
-  name: kube-deployments-notifier
-  namespace: kube-system
+  - kind: ServiceAccount
+    name: kube-deployments-notifier
+    namespace: kube-system
 ```
